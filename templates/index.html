@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Search Engine</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            padding: 30px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            width: 300px;
+        }
+        .result {
+            background: white;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🔍 Mini Search Engine</h1>
+
+<form method="POST">
+    <input name="url" placeholder="Start URL" required><br>
+    <input name="keyword" placeholder="Keyword" required><br>
+    <input name="depth" type="number" value="1" min="0"><br>
+    <button type="submit">Search</button>
+</form>
+
+{% for r in results %}
+<div class="result">
+    <p>{{ r.text }}</p>
+    <small>Source: {{ r.source }}</small>
+</div>
+{% endfor %}
+
+</body>
+</html>
