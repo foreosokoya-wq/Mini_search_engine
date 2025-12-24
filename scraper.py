@@ -36,6 +36,7 @@ def dynamic_scrape(url):
     options.add_argument(f"user-agent={random.choice(USER_AGENTS)}")
 
     driver = uc.Chrome(options=options)
+    random_delay(2, 4)    
     driver.get(url)
 
     random_delay(2, 4)
@@ -52,9 +53,9 @@ def extract_data(html, keyword, base_url):
     texts = []
     links = []
 
-    for tag in soup.find_all(["p", "li", "span"]):
+    for tag in soup.find_all(["p", "li", "span", "div"]):
         text = tag.get_text(strip=True)
-        if keyword.lower() in text.lower() and len(text) > 40:
+        if keyword.lower() in text.lower() and len(text) > 40 and len(text) <250:
             texts.append(text)
 
     for a in soup.find_all("a", href=True):
@@ -88,8 +89,8 @@ def crawl(start_url, keyword, max_depth=1, max_pages=10):
 
         texts, links = extract_data(html, keyword, url)
 
-        for t in texts:
-            results.append({"url": url, "text": t})
+        for t, u in zip(texts, links):
+            results.append({"url": u, "text": t})
 
         soup = BeautifulSoup(html, "html.parser")
         for a in soup.find_all("a", href=True):

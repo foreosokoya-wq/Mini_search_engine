@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    
+    h2{
+        text-align: centre;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: 40px;
+    }
+    p{
+        font-family: cursive;
+        font-style: oblique;
+    }
+</style>
+<h2>About MiniSearch</h2>
+
+<p>
+MiniSearch is a lightweight web search engine built with Flask.
+It supports static and dynamic websites using requests and Selenium.
+</p>
+
+<p>
+This project demonstrates:
+<ul>
+    <li>Web scraping</li><br>
+    <li>Bot-avoidance techniques</li><br>
+    <li>Flask web apps</li><br>
+    <li>Clean project structure</li><br>
+</ul>
+</p>
+<style>
+    h2{
+        text-align: center;
+    }
+    p{
+        text-align: center;
+        font-size: 30px;
+    }
+    ul{
+        margin-top: 80px;
+        font-size: 20px;
+        margin-left: 500px;
+        text-decoration: none;
+        border: 1px solid rgb(255, 181, 233);
+        border-radius: 10px;
+        background-color: palevioletred;
+        min-height: 200px;
+        max-width: 200px;
+        color: white;
+        font-family: cursive;
+        transition: 0.5s;
+    }
+    ul:hover{
+        background-color: rgb(241, 0, 121);
+        border-style: outset;
+        box-shadow:  5px 10px 18px #888;
+        color: white;
+        font-family: cursive;
+    }
+</style>
+{% endblock %}

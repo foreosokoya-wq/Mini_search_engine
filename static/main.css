@@ -1,7 +1,12 @@
 body {
     font-family: Arial;
-    background: #f4f6f8;
+    background: #ffdff7;
     padding: 30px;
+}
+img{
+    border-radius: 10px;
+
+    width: max-content;
 }
 input{
     padding: 10px;
@@ -9,10 +14,16 @@ input{
     width: 300px;
     border-radius: 5px;
 }
+small{
+    font-family: cursive;
+    font-weight: bold;
+}
 #search{
     border-radius: 10px;
-    background-color: rgb(214, 212, 212);
+    max-width: 75px;
+    background-color: rgb(253, 251, 251);
     transition: 0.2s;
+    margin-left: 350px;
 }
 #search:hover{
     background-color: palevioletred;
@@ -23,4 +34,31 @@ input{
     padding: 15px;
     margin-top: 15px;
     border-radius: 5px;
+}
+h1{
+    font-family: cursive;
+}
+
+nav{
+    text-decoration: none;
+    
+    display: inline;
+    padding: 12px 6px;
+}
+nav a{
+    text-align: right;
+    margin: 10px;
+    text-decoration: underline;
+    color: black;
+    
+    font-weight: bold;
+    font-family: cursive;
+    transition: 0.3s;
+}
+nav a:hover{
+    border: 1px solid rgb(128, 9, 48);
+    box-shadow: #888888 0px 4px 8px 0px;
+    border-radius: 5px;
+    background-color: rgb(128, 9, 48);   
+    color: peachpuff; 
 }

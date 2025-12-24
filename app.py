@@ -3,8 +3,13 @@ from scraper import crawl
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def index():
+@app.route("/")
+def welcome():
+    return render_template("welcome.html")
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
     results = []
 
     if request.method == "POST":
@@ -16,6 +21,12 @@ def index():
         results = crawl(url, keyword, depth, max_pages)
 
     return render_template("index.html", results=results)
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

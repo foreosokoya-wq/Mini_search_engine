@@ -1,45 +1,10 @@
+<!--- 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <title>Mini Search Engine</title>
-    <style>
-        body {
-    font-family: Arial;
-    background: #ffdff7;
-    padding: 30px;
-}
-img{
-    border-radius: 10px;
-
-    width: max-content;
-}
-input{
-    padding: 10px;
-    margin: 5px;
-    width: 300px;
-    border-radius: 5px;
-}
-small{
-    font-family: 'Times New Roman', Times, serif;
-}
-#search{
-    border-radius: 10px;
-    background-color: rgb(253, 251, 251);
-    transition: 0.2s;
-}
-#search:hover{
-    background-color: palevioletred;
-    cursor: pointer;
-}
-.result {
-    background: white;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 5px;
-}
-
-    </style>
     
 </head>
 <body>
@@ -67,3 +32,75 @@ small{
 
 </body>
 </html>
+-->
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="logo">MiniSearch</h1>
+<style>
+    h1{
+        text-align: center;
+    }
+    form{
+        margin-top: 20px;
+        align-items: center;
+        margin-left: 100px;
+    }
+    .url{
+        margin-left: 100px;
+        margin-top: 50px;
+        border-radius: 30px;
+        min-width: 600px;
+        min-height: 50px;
+        font-size: medium;
+    }
+    .url:hover{
+        transition: 0.5s;
+        box-shadow: 0px 0px 10px#888;
+    }
+    .kw{
+        border-radius: 10px;
+        max-width: 100px;
+        margin-left: 20px;
+    }
+    .kw:hover{
+        transition: 0.5s;
+        box-shadow: 0px 0px 10px#888;
+    }
+    .k{
+        margin-left: 80px;
+    }
+    .depth, .pages{
+        max-width: 50px;
+        margin-left: 20px;
+    }
+    .md, .mp{
+        margin-left: 100px;
+    }
+    #search:hover{
+    
+        background-color: rgb(235, 53, 53);
+        color: white;
+    }
+</style>
+
+<form action="search" method="POST">
+    <input type="text" name="url" class="url" placeholder="Type a URL address" required>
+    <small class="k">Keyword</small><input class="kw" type="text" name="keyword" placeholder="Keyword" required><br><br>
+    <small class="md">Max Depth</small><input class="depth" type="number" name="depth" value="1" min="0">
+    <small class="mp">Max Pages</small><input class="pages" type="number" name="max_pages" value="10" min="1">
+    <input type="submit" value="Search" id="search">
+</form>
+{% if results %}
+    {% for r in results %}
+        <div class="result">
+            <p>{{ r.text }}</p>
+            <a href="{{ r.source }}" target="_blank">{{ r.source }}</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
+{% endblock %}
+
