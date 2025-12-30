@@ -1,8 +1,21 @@
+
 import requests, time, random
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from collections import deque
 import undetected_chromedriver as uc
+
+#----------SNIPPET-------------
+def make_snippet(text, keyword, length=160):
+    text = text.replace("\n", " ").strip()
+
+    idx = text.lower().find(keyword.lower())
+    if idx == -1:
+        return text[:length] + "..."
+
+    start = max(idx - 60, 0)
+    return "..." + text[start:start + length] + "..."
+
 
 # ---------- BOT AVOIDANCE ----------
 USER_AGENTS = [
@@ -47,24 +60,39 @@ def dynamic_scrape(url):
 
 
 # ---------- EXTRACT TEXT + LINKS ----------
-def extract_data(html, keyword, base_url):
+def extract_data(html, keyword, url):
     soup = BeautifulSoup(html, "html.parser")
 
-    texts = []
-    links = []
+    results = []
+    seen_snippets = set()
 
-    for tag in soup.find_all(["p", "li", "span", "div"]):
-        text = tag.get_text(strip=True)
-        if keyword.lower() in text.lower() and len(text) > 40 and len(text) <250:
-            texts.append(text)
+    page_title = soup.title.string.strip() if soup.title else url
 
-    for a in soup.find_all("a", href=True):
-        link_text = a.get_text(strip=True)
-        href = urljoin(base_url, a["href"])
-        if keyword.lower() in link_text.lower():
-            links.append(href)
+    for tag in soup.find_all(["p", "li", "h3", "a"]):
+        text = tag.get_text(" ", strip=True)
 
-    return texts, links
+        if not any(word in text.lower() for word in keyword.lower().split()):
+            continue
+
+        if len(text) < 40:
+            continue
+
+        snippet = make_snippet(text, keyword)
+
+        unique_key = snippet + url
+        if unique_key in seen_snippets:
+            continue
+
+        seen_snippets.add(unique_key)
+
+        results.append({
+            "title": page_title,
+            "snippet": snippet,
+            "url": url
+        })
+
+    return results
+
 
 
 # ---------- MAIN CRAWLER ----------
@@ -73,10 +101,13 @@ def crawl(start_url, keyword, max_depth=1, max_pages=10):
     visited = set([start_url])
     pages_crawled = 0
     queue = deque([(start_url, 0)])
+      # prevents duplicate search results
+
     results = []
 
     while queue:
         url, depth = queue.popleft()
+        visited.add(url)
         if depth > max_depth or pages_crawled >= max_pages:
             continue
 
@@ -86,18 +117,17 @@ def crawl(start_url, keyword, max_depth=1, max_pages=10):
 
         if not html:
             continue
+        pages_crawled += 1
 
-        texts, links = extract_data(html, keyword, url)
+        page_results = extract_data(html, keyword, url) or []
+        results.extend(page_results)
 
-        for t, u in zip(texts, links):
-            results.append({"url": u, "text": t})
-
+        # 🔹 THIS IS ONLY FOR DISCOVERING NEW PAGES
         soup = BeautifulSoup(html, "html.parser")
         for a in soup.find_all("a", href=True):
-            full_url = urljoin(url, a["href"])
-            if urlparse(full_url).netloc == domain and full_url not in visited:
-                visited.add(full_url)
-                pages_crawled += 1
-                queue.append((full_url, depth + 1))
+            link = urljoin(url, a["href"])
+
+            if urlparse(link).netloc == domain and link not in visited:
+                queue.append((link, depth + 1))
 
     return results

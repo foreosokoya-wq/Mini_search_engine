@@ -14,3 +14,5 @@ venv/
 
 # Selenium / Chrome
 *.log
+
+.DS_Store

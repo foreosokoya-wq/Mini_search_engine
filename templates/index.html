@@ -38,6 +38,7 @@
 
 <h1 class="logo">MiniSearch</h1>
 <style>
+
     h1{
         text-align: center;
     }
@@ -46,26 +47,29 @@
         align-items: center;
         margin-left: 100px;
     }
-    .url{
+    .url_holder{
         margin-left: 100px;
         margin-top: 50px;
         border-radius: 30px;
         min-width: 600px;
         min-height: 50px;
         font-size: medium;
+        background-color: var(--input-bg);
     }
-    .url:hover{
+    .url_holder:hover{
         transition: 0.5s;
-        box-shadow: 0px 0px 10px#888;
+        box-shadow: 0px 0px 12px var(--shadow);
     }
     .kw{
         border-radius: 10px;
         max-width: 100px;
         margin-left: 20px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
     }
     .kw:hover{
         transition: 0.5s;
-        box-shadow: 0px 0px 10px#888;
+        box-shadow: 0px 0px 12px var(--shadow);
     }
     .k{
         margin-left: 80px;
@@ -73,6 +77,8 @@
     .depth, .pages{
         max-width: 50px;
         margin-left: 20px;
+        color: var(--text-color);
+        background-color: var(--input-bg);
     }
     .md, .mp{
         margin-left: 100px;
@@ -82,25 +88,84 @@
         background-color: rgb(235, 53, 53);
         color: white;
     }
-</style>
+    .results{
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 30px;
+        background-color: var(--result-bg);
 
+    }
+    hr{
+        width: 1210px;
+    }
+    .result-card {
+    margin-bottom: 25px;
+    max-width: 700px;
+    }
+
+    .result-title {
+    font-size: 20px;
+    color: var(--title-bg);
+    text-decoration: none;
+    }
+
+    .result-title:hover {
+    text-decoration: underline;
+    }
+
+    .result-url {
+    font-size: 14px;
+    color: var(--url-bg);
+    margin: 3px 0;
+    }
+
+    .result-snippet {
+    font-size: 15px;
+    color: var(--snippet-bg);
+    }
+    .theme-btn {
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+
+</style>
+<div><button onclick="toggleTheme()" class="theme-btn">
+  🌙 Toggle Theme
+</button>
+</div>
 <form action="search" method="POST">
-    <input type="text" name="url" class="url" placeholder="Type a URL address" required>
+    <input type="text" name="url" class="url_holder" placeholder="Type a URL address" required>
     <small class="k">Keyword</small><input class="kw" type="text" name="keyword" placeholder="Keyword" required><br><br>
     <small class="md">Max Depth</small><input class="depth" type="number" name="depth" value="1" min="0">
     <small class="mp">Max Pages</small><input class="pages" type="number" name="max_pages" value="10" min="1">
     <input type="submit" value="Search" id="search">
 </form>
 {% if results %}
+  <div class="results">
     {% for r in results %}
-        <div class="result">
-            <p>{{ r.text }}</p>
-            <a href="{{ r.source }}" target="_blank">{{ r.source }}</a>
+      <div class="result-card">
+        <a href="{{ r.url }}" target="_blank" class="result-title">
+          {{ r.title }}
+        </a>
+
+        <div class="result-url">
+          {{ r.url }}
         </div>
+
+        <p class="result-snippet">
+          {{ r.snippet }}
+        </p>
+        
+      </div>
+      <hr>
+      <br>
     {% endfor %}
-{% else %}
-    <p>No results found.</p>
+  </div>
 {% endif %}
 
-{% endblock %}
 
+{% endblock %}
